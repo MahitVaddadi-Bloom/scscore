@@ -1,17 +1,26 @@
-'''
+"""
 This is a standalone, importable SCScorer model. It does not have tensorflow as a
 dependency and is a more attractive option for deployment. The calculations are
 fast enough that there is no real reason to use GPUs (via tf) instead of CPUs (via np)
-'''
+"""
 
-import math, sys, random, os
+import math
+import sys
+import random
+import os
 import numpy as np
 import time
-import rdkit.Chem as Chem
-import rdkit.Chem.AllChem as AllChem
 import json
 import gzip
 import six
+
+try:
+    import rdkit.Chem as Chem
+    import rdkit.Chem.AllChem as AllChem
+except ImportError:
+    print("Warning: RDKit not found. Please install rdkit to use SCScorer.")
+    Chem = None
+    AllChem = None
 
 import os
 project_root = os.path.dirname(os.path.dirname(__file__))
@@ -31,7 +40,9 @@ class SCScorer():
         self.score_scale = score_scale
         self._restored = False
 
-    def restore(self, weight_path=os.path.join(project_root, 'models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.pickle'), FP_rad=FP_rad, FP_len=FP_len):
+    def restore(self, weight_path=None, FP_rad=FP_rad, FP_len=FP_len):
+        if weight_path is None:
+            weight_path = os.path.join(project_root, 'models', 'full_reaxys_model_1024bool', 'model.ckpt-10654.as_numpy.json.gz')
         self.FP_len = FP_len; self.FP_rad = FP_rad
         self._load_vars(weight_path)
         print('Restored variables from {}'.format(weight_path))
@@ -95,7 +106,10 @@ class SCScorer():
 
     def _load_vars(self, weight_path):
         if weight_path.endswith('pickle'):
-            import cPickle as pickle
+            try:
+                import pickle
+            except ImportError:
+                import cPickle as pickle
             with open(weight_path, 'rb') as fid:
                 self.vars = pickle.load(fid)
                 self.vars = [x.tolist() for x in self.vars]

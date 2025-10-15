@@ -1,0 +1,12 @@
+include README.md
+include LICENSE
+include requirements.txt
+include setup.sh
+include example.py
+recursive-include models *.json.gz
+recursive-include data *.txt *.csv *.h5
+recursive-include scscore *.py
+recursive-include utils *.py
+recursive-include scripts *.py
+global-exclude *.pyc
+global-exclude __pycache__

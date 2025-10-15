@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scscore"
+version = "1.0.0"
+description = "SCScore: Synthetic Complexity Learned from a Reaction Corpus"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "SCScore Authors"},
+]
+keywords = ["chemistry", "synthetic complexity", "retrosynthesis", "cheminformatics", "drug discovery"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy",
+    "rdkit",
+    "six",
+]
+
+[project.optional-dependencies]
+tensorflow = [
+    "tensorflow>=2.0.0",
+]
+training = [
+    "tensorflow>=2.0.0", 
+    "h5py",
+    "pandas",
+]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "black",
+    "isort",
+    "flake8",
+    "jupyter",
+]
+
+[project.urls]
+Homepage = "https://github.com/EliLillyCo/scscore"
+Repository = "https://github.com/EliLillyCo/scscore"
+Documentation = "https://github.com/EliLillyCo/scscore/blob/main/README.md"
+
+[project.scripts]
+scscore = "scscore.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scscore*", "utils*", "scripts*"]
+
+[tool.setuptools.package-data]
+scscore = ["models/**/*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
